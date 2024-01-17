@@ -1,0 +1,3 @@
+[submodule "lib/jq-module/zyupload/zyupload"]
+	path = lib/jq-module/zyupload/zyupload
+	url = git@github.com:xuezchuang/zyupload.git
