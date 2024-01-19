@@ -38,7 +38,6 @@
     </div>
 
     <hr>
-
     <div class="layui-upload">
         <button type="button" class="layui-btn" id="test1" name="123">上传图片</button>
         <div class="layui-upload-list">
@@ -46,17 +45,62 @@
             <p id="demoText"></p>
         </div>
     </div>
-
     <div class="layui-progress layui-progress-big" lay-showPercent="yes" lay-filter="demo">
         <div class="layui-progress-bar" lay-percent=""></div>
     </div>
-
     <hr>
 
+    <hr>
+    <div class="layui-upload">
+      <button type="button" class="layui-btn" id="test2">多图片上传</button>
+      <div class="layui-upload-list" id="demo2"></div>
+    </div>
+    <hr>
+  
+    <div class="layui-upload">
+      <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+      <div class="layui-upload-list">
+        <table class="layui-table">
+          <thead>
+            <th>文件名</th>
+            <th>大小</th>
+            <th>上传进度</th>
+            <th>速度</th>
+            <th>操作</th>
+          </thead>
+          <tbody id="demoList"></tbody>
+        </table>
+      </div>
+      <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+    </div>
+  
+    <hr>
+    <div class="layui-btn-container">
+      <button type="button" class="layui-btn test333" lay-data="{size:10,url:'a'}" id="test3"><i
+          class="layui-icon">&#xe67c;</i>上传文件</button>
+      <button type="button" class="layui-btn layui-btn-primary test333" lay-data="{size:20,url:'b'}" id="test33"><i
+          class="layui-icon">&#xe67c;</i>换个样式</button>
+  
+      <button type="button" class="layui-btn" id="test4"><i class="layui-icon">&#xe67c;</i>上传视频</button>
+      <button type="button" class="layui-btn" id="test5"><i class="layui-icon">&#xe67c;</i>上传音频</button>
+    </div>
+    <hr>
+  
+    <div class="layui-btn-container">
+      <button class="layui-btn testm" lay-data="{url: '/a/'}">参数设在元素上</button>
+      <button class="layui-btn testm" lay-data="{url: '/b/', accept: 'file',size:5}">参数设在元素上</button>
+    </div>
+  
+    <hr>
+    <div class="layui-btn-container">
+      <button type="button" class="layui-btn layui-btn-normal" id="test6">选择文件</button>
+      <button type="button" class="layui-btn" id="test7">开始上传</button>
+    </div>
+  
     <hr><br>
     <div class="layui-upload-drag" id="test8">
-        <i class="layui-icon">&#xe67c;</i>
-        <p>点击上传，或将文件拖拽到此处</p>
+      <i class="layui-icon">&#xe67c;</i>
+      <p>点击上传，或将文件拖拽到此处</p>
     </div>
     <hr><br>
 
@@ -101,7 +145,7 @@
                     console.info(file.name);
                     console.info("此文件上传到服务器地址：");
                     console.info(response);
-                    $("#uploadInf").append("<p>上传成功，文件地址是：" + response + "</p>");
+                    $("#uploadInf").append("<p>上传成功</p>");
                 },
                 onFailure: function (file, response) {          // 文件上传失败的回调方法
                     console.info("此文件上传失败：");
@@ -235,6 +279,7 @@
                             , '<td>' + file.name + '</td>'
                             , '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>'
                             , '<td><div class="layui-progress" lay-filter="progress-' + index + '"><div class="layui-progress-bar" lay-percent=""></div></div></td>'
+                            , '<td><span class="speed-info"></span></td>'
                             , '<td>'
                             , '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
                             , '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
@@ -260,11 +305,14 @@
                         element.render('progress');
                     });
                 },
-                done: function (res, index, upload) {
+                done: function (res, index, upload,speed) {
                     //if(res.code == 0){ //上传成功
                     var tr = demoListView.find('tr#upload-' + index)
                         , tds = tr.children();
-                    tds.eq(3).html(''); //清空操作
+                    tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                    var speedText = '速度：' + (speed/1024).toFixed(2) + ' KB/s';
+                    tds.eq(3).find('.speed-info').text(speedText);
+                    // tds.eq(4).html(''); //清空操作
                     delete this.files[index]; //删除文件队列已经上传成功的文件
                     return;
                     //}
@@ -278,10 +326,14 @@
                         , tds = tr.children();
                     tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
                 },
-                progress: function (n, elem, e, index) {
+                progress: function (n, elem, e, index,speed) {
                     console.log(n);
                     console.log(index);
                     element.progress('progress-' + index, n + '%'); //进度条
+                    var speedText = '速度：' + (speed/1024).toFixed(2) + ' KB/s';
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(3).find('.speed-info').text(speedText);
                 }
             });
 

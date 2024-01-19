@@ -178,6 +178,12 @@
           "target": "_self"
         },
         {
+          "title": "文件下载",
+          "href": "page/down.html",
+          "icon": "fa fa-arrow-down",
+          "target": "_self"
+        },
+        {
           "title": "富文本编辑器",
           "href": "page/editor.html",
           "icon": "fa fa-edit",
